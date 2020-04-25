@@ -5,7 +5,8 @@
     "license": "MIT",
     "private": true,
     "scripts": {
-        "start": "tsc && node build/index.js"
+        "start": "tsc && node build/index.js",
+        "build": "tsc"
     },
     "devDependencies": {
         "typescript": "3.8.3",
