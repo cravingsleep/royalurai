@@ -4,7 +4,7 @@ import Game from '../types/game';
  * The state of a Ur board before anything has
  * happened.
  */
-export const startingGameState: Game = {
+export const getStartingGameState = (): Game => ({
     white: {
         chitsCompleted: 0,
         chitsAwaiting: 7,
@@ -15,4 +15,4 @@ export const startingGameState: Game = {
         chitsAwaiting: 7,
         chitPositions: []
     }
-};
+});

@@ -3,7 +3,7 @@ import Team from '../types/team';
 import Move, { Roll } from '../types/move';
 import Game from '../types/game';
 import { gameEnded, getWinningSide } from '../validators/validators';
-import { startingGameState } from './constants';
+import { getStartingGameState } from './constants';
 import { randomUrRoll } from '../util';
 
 /**
@@ -37,6 +37,11 @@ function changeBoard(game: Game, team: Team, move: Move, roll: Roll): Game {
      * The chits of the player who has not just moved.
      */
     const notOwnChits = notOwnTeam.chitPositions;
+
+    // player has opted to do nothing (or could not do anything)
+    if (move === 'nothing') {
+        return game;
+    }
 
     // handle placing a new chit down
     if (move === 'new') {
@@ -105,7 +110,7 @@ export function pit<T extends Player>(WhiteCons: new (team: Team) => T, BlackCon
     /**
      * The game being tracked.
      */
-    let game = startingGameState;
+    let game = getStartingGameState();
 
     /**
      * Which side is moving right now.
@@ -130,6 +135,11 @@ export function pit<T extends Player>(WhiteCons: new (team: Team) => T, BlackCon
          * If it was 0 then they have to miss a go without moving.
          */
         if (rolled === 0) {
+            /**
+             * Switch the side playing.
+             */
+            sidePlaying = sidePlaying === Team.WHITE ? Team.BLACK : Team.WHITE;
+
             continue;
         }
 
@@ -147,7 +157,6 @@ export function pit<T extends Player>(WhiteCons: new (team: Team) => T, BlackCon
          * Switch the side playing.
          */
         sidePlaying = sidePlaying === Team.WHITE ? Team.BLACK : Team.WHITE;
-
     }
 
     const winningSide = getWinningSide(game);

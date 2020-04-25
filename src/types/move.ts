@@ -1,7 +1,7 @@
 /**
  * The place of the chit you want to move or place a new chit.
  */
-type Move = number | 'new';
+type Move = number | 'new' | 'nothing';
 
 /**
  * The 4 possible rolls (0 is a possible roll but is not taken into account,

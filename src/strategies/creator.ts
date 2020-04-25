@@ -17,6 +17,10 @@ class CreatorStrategy extends Player {
             return 'new';
         }
 
+        if (moves.chitPositions.length === 0) {
+            return 'nothing';
+        }
+
         // Otherwise move a random one.
         return randChoice(moves.chitPositions);
     }

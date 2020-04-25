@@ -19,6 +19,10 @@ class RandomStrategy extends Player {
             return 'new';
         }
 
+        if (moves.chitPositions.length === 0) {
+            return 'nothing';
+        }
+
         return randomMove;
     }
 }

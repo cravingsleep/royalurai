@@ -6,6 +6,7 @@
     "private": true,
     "scripts": {
         "start": "tsc && node build/index.js",
+        "start:debug": "tsc && node --inspect=9229 build/index.js",
         "build": "tsc"
     },
     "devDependencies": {

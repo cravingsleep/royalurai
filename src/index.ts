@@ -1,9 +1,9 @@
 import { simulate } from './fights/simulate';
 import CreatorStrategy from './strategies/creator';
-import RandomStrategy from './strategies/random';
+import AggressiveStrategy from './strategies/aggressive';
 
 console.log(simulate(
     CreatorStrategy,
-    RandomStrategy,
+    AggressiveStrategy,
     10000
 ));

@@ -12,28 +12,17 @@ export function simulate<T extends Player>(Player1: new (team: Team) => T, Playe
     return range(iterations).reduce(acc => {
         const isPlayer1White = Math.random() > 0.5;
 
-        const winningSide = isPlayer1White ? pit(Player1, Player2) : pit(Player2, Player1);
+        const pitting = isPlayer1White ? pit(Player1, Player2) : pit(Player2, Player1);
 
-        if (winningSide === Team.WHITE) {
-            return Object.assign(
-                {},
-                acc,
-                isPlayer1White ? {
-                    player1Wins: acc.player1Wins + 1
-                } : {
-                        player2Wins: acc.player2Wins + 1
-                    }
-            );
-        }
+        const didPlayerOneWin = isPlayer1White && pitting === Team.WHITE || (!isPlayer1White && pitting === Team.BLACK);
 
         return Object.assign(
             {},
             acc,
-            isPlayer1White ? {
-                player2Wins: acc.player2Wins + 1
-            } : {
-                    player1Wins: acc.player1Wins + 1
-                }
+            {
+                player1Wins: didPlayerOneWin ? acc.player1Wins + 1 : acc.player1Wins,
+                player2Wins: didPlayerOneWin ? acc.player2Wins : acc.player2Wins + 1
+            }
         );
     }, {
         player1Wins: 0,

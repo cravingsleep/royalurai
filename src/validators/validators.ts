@@ -17,6 +17,11 @@ export function getMoveableChits(
     const whiteChitPositions = game.white.chitPositions;
 
     /**
+     * The team belonging to the mover.
+     */
+    const ownTeam = team === Team.WHITE ? game.white : game.black;
+
+    /**
      * Grab the strategy callers chits.
      */
     const ownTeamChits = team === Team.WHITE ? whiteChitPositions : blackChitPositions;
@@ -24,7 +29,7 @@ export function getMoveableChits(
     /**
      * Can we move an awaiting chit onto the board.
      */
-    const canMoveAwaitingChit = !ownTeamChits.find(position => position === roll);
+    const canMoveAwaitingChit = ownTeam.chitsAwaiting > 0 && !ownTeamChits.find(position => position === roll);
 
     /**
      * The position of all the chits that can make valid moves.
@@ -43,6 +48,10 @@ export function getMoveableChits(
             return true;
         }
 
+        if (potentialPosition > 15) {
+            return false;
+        }
+
         /**
          * Will it hit one of its own chits
          */
@@ -55,6 +64,24 @@ export function getMoveableChits(
         chitPositions: moveableChits,
         canMoveAwaitingChit
     };
+}
+
+export function getChitsWhichCanTake(game: Game, roll: Roll, team: Team): number[] {
+    /**
+     * Grab the moveable chits.
+     */
+    const moveableChits = getMoveableChits(game, roll, team).chitPositions;
+
+    /**
+     * Grab the chits that are not the strategy owners.
+     */
+    const notOwnChits = team === Team.WHITE ? game.black.chitPositions : game.white.chitPositions;
+
+    return moveableChits.filter(position => {
+        const willHitOpponent = notOwnChits.find(enemyPosition => enemyPosition === position + roll);
+
+        return willHitOpponent;
+    });
 }
 
 /**
