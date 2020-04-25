@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "removeComments": true,
+        "strictNullChecks": true,
+        "outDir": "build",
+        "target": "ES6",
+        "baseUrl": ".",
+        "lib": [
+            "es2019",
+            "DOM"
+        ]
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "**/*.spec.ts"
+    ]
+}

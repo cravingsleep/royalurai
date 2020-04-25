@@ -1,0 +1,16 @@
+{
+    "name": "royalurai",
+    "version": "1.0.0",
+    "main": "index.js",
+    "license": "MIT",
+    "private": true,
+    "scripts": {
+        "start": "tsc && node build/index.js"
+    },
+    "devDependencies": {
+        "typescript": "3.8.3",
+        "@typescript-eslint/eslint-plugin": "2.27.0",
+        "@typescript-eslint/parser": "2.27.0",
+        "eslint": "6.8.0"
+    }
+}
