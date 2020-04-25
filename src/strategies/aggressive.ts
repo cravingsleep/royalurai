@@ -22,13 +22,19 @@ class AggressiveStrategy extends Player {
             return randomAttack;
         }
 
-        // If we can place a new chit, place a new one.
-        if (moves.canMoveAwaitingChit) {
+        const movesAddPlaceNewOne = moves.chitPositions.concat(-1);
+
+        const randomMove = randChoice(movesAddPlaceNewOne);
+
+        if (randomMove === -1) {
             return 'new';
         }
 
-        // Otherwise move a random one.
-        return randChoice(moves.chitPositions);
+        if (moves.chitPositions.length === 0) {
+            return 'nothing';
+        }
+
+        return randomMove;
     }
 }
 

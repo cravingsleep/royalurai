@@ -11,6 +11,10 @@ class RandomStrategy extends Player {
     move(game: Game, roll: Roll): Move {
         const moves = getMoveableChits(game, roll, this.team);
 
+        if (moves.chitPositions.length === 0 && !moves.canMoveAwaitingChit) {
+            return 'nothing';
+        }
+
         const movesAddPlaceNewOne = moves.chitPositions.concat(-1);
 
         const randomMove = randChoice(movesAddPlaceNewOne);
