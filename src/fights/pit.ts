@@ -3,9 +3,24 @@ import Team from '../types/team';
 import Move, { Roll } from '../types/move';
 import Game from '../types/game';
 import { gameEnded, getWinningSide, getMoveableChits } from '../validators/validators';
-import { getStartingGameState } from './constants';
+import { getStartingGameState, flowerPositions } from './constants';
 import { randomUrRoll } from '../util';
 import { PlaceNewChitError, ChitDoesNotExistError } from './errors';
+
+/**
+ * Combines the new game state and who plays next.
+ */
+interface GameAndSide {
+    game: Game;
+    sideToPlay: Team;
+}
+
+/**
+ * Helper for switching the team.
+ */
+function not(team: Team): Team {
+    return team === Team.WHITE ? Team.BLACK : Team.WHITE;
+}
 
 /**
  * Returns a new board once the move has happened.
@@ -18,7 +33,7 @@ function changeBoard(
     team: Team,
     move: Move,
     roll: Roll
-): Game {
+): GameAndSide {
     /**
      * Is the mover the white colour.
      */
@@ -55,7 +70,10 @@ function changeBoard(
 
         ownTeam.chitsAwaiting -= 1;
 
-        return game;
+        return {
+            game,
+            sideToPlay: not(team)
+        };
     }
 
     // no chit exists in the position the player wanted to move
@@ -71,7 +89,10 @@ function changeBoard(
         ownTeam.chitPositions = nextOwnChits;
         ownTeam.chitsCompleted += 1;
 
-        return game;
+        return {
+            game,
+            sideToPlay: not(team)
+        };
     }
 
     /**
@@ -106,7 +127,12 @@ function changeBoard(
 
     ownTeam.chitPositions = nextOwnChits;
 
-    return game;
+    const landedOnFlower = flowerPositions.includes(move + roll);
+
+    return {
+        game,
+        sideToPlay: landedOnFlower ? team : not(team)
+    };
 }
 
 /**
@@ -188,12 +214,13 @@ export function pit<T extends Player>(WhiteCons: new (team: Team) => T, BlackCon
         /**
          * Alter the game board based on the move.
          */
-        game = changeBoard(game, sidePlaying, move, rolled);
+        const nextBoardState = changeBoard(game, sidePlaying, move, rolled);
 
         /**
-         * Switch the side playing.
+         * Set the next state.
          */
-        sidePlaying = sidePlaying === Team.WHITE ? Team.BLACK : Team.WHITE;
+        game = nextBoardState.game;
+        sidePlaying = nextBoardState.sideToPlay;
     }
 
     const winningSide = getWinningSide(game);

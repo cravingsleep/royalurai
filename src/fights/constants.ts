@@ -16,3 +16,8 @@ export const getStartingGameState = (): Game => ({
         chitPositions: []
     }
 });
+
+/**
+ * The positions of the flowers on the board.
+ */
+export const flowerPositions = [4, 8, 14];
