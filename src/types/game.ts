@@ -12,7 +12,7 @@ export interface GameTeam {
 
     /**
      * An array of positions where the chits are, i.e.
-     * `[1, 4]` means there is a chit on the first place
+     * `[1, 5]` means there is a chit on the first place
      * in the garrison and the first place of the war channel.
      */
     chitPositions: number[];
