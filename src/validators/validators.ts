@@ -48,6 +48,10 @@ export function getMoveableChits(
             return true;
         }
 
+        /**
+         * If the chit would go over the board and not exit with the right amount of
+         * moves then it cannot be moved.
+         */
         if (potentialPosition > 15) {
             return false;
         }

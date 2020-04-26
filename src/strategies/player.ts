@@ -11,6 +11,9 @@ abstract class Player {
         protected readonly team: Team
     ) { }
 
+    /**
+     * Called by the strategy pitter. Given a game and a roll decide how to move.
+     */
     abstract move(game: Game, roll: Roll): Move;
 }
 

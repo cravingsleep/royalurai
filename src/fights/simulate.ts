@@ -8,13 +8,18 @@ interface Winnings {
     player2Wins: number;
 }
 
-export function simulate<T extends Player>(Player1: new (team: Team) => T, Player2: new (team: Team) => T, iterations: number): Winnings {
+export function simulate<T extends Player>(
+    Player1: new (team: Team) => T,
+    Player2: new (team: Team) => T,
+    iterations: number
+): Winnings {
     return range(iterations).reduce(acc => {
         const isPlayer1White = Math.random() > 0.5;
 
         const pitting = isPlayer1White ? pit(Player1, Player2) : pit(Player2, Player1);
 
-        const didPlayerOneWin = isPlayer1White && pitting === Team.WHITE || (!isPlayer1White && pitting === Team.BLACK);
+        const didPlayerOneWin = isPlayer1White && pitting === Team.WHITE
+            || (!isPlayer1White && pitting === Team.BLACK);
 
         return Object.assign(
             {},

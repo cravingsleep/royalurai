@@ -2,9 +2,10 @@ import Player from '../strategies/player';
 import Team from '../types/team';
 import Move, { Roll } from '../types/move';
 import Game from '../types/game';
-import { gameEnded, getWinningSide } from '../validators/validators';
+import { gameEnded, getWinningSide, getMoveableChits } from '../validators/validators';
 import { getStartingGameState } from './constants';
 import { randomUrRoll } from '../util';
+import { PlaceNewChitError, ChitDoesNotExistError } from './errors';
 
 /**
  * Returns a new board once the move has happened.
@@ -12,7 +13,12 @@ import { randomUrRoll } from '../util';
  * TODO this mutates which is gross but I do not have a better way to
  * change it when there is so much `if` around the team :/
  */
-function changeBoard(game: Game, team: Team, move: Move, roll: Roll): Game {
+function changeBoard(
+    game: Game,
+    team: Team,
+    move: Move,
+    roll: Roll
+): Game {
     /**
      * Is the mover the white colour.
      */
@@ -38,18 +44,23 @@ function changeBoard(game: Game, team: Team, move: Move, roll: Roll): Game {
      */
     const notOwnChits = notOwnTeam.chitPositions;
 
-    // player has opted to do nothing (or could not do anything)
-    if (move === 'nothing') {
-        return game;
-    }
-
     // handle placing a new chit down
     if (move === 'new') {
+        // the player has tried to play a new chit when they have none in reserves.
+        if (ownTeam.chitsAwaiting === 0) {
+            throw (new PlaceNewChitError(game, team, roll).toString());
+        }
+
         ownChits.push(roll);
 
         ownTeam.chitsAwaiting -= 1;
 
         return game;
+    }
+
+    // no chit exists in the position the player wanted to move
+    if (!ownChits.find(position => position === move)) {
+        throw (new ChitDoesNotExistError(game, team, move, roll).toString());
     }
 
     // they have a chit out
@@ -66,7 +77,11 @@ function changeBoard(game: Game, team: Team, move: Move, roll: Roll): Game {
     /**
      * Does the chit hit an opponent chit when it moves.
      */
-    const chitHitsOpponent = notOwnChits.find(position => position === move + roll);
+    const chitHitsOpponent = notOwnChits.find(position =>
+        position === move + roll
+        && position > 4 // garrisons
+        && position < 13 // on the way out
+    );
 
     /**
      * The chit gets removed from its current place and placed in the next place.
@@ -135,6 +150,28 @@ export function pit<T extends Player>(WhiteCons: new (team: Team) => T, BlackCon
          * If it was 0 then they have to miss a go without moving.
          */
         if (rolled === 0) {
+            /**
+             * Switch the side playing.
+             */
+            sidePlaying = sidePlaying === Team.WHITE ? Team.BLACK : Team.WHITE;
+
+            continue;
+        }
+
+        /**
+         * Get the available moves for the player with their roll.
+         */
+        const moves = getMoveableChits(game, rolled, sidePlaying);
+
+        /**
+         * Can they make any moves at all.
+         */
+        const canPlayerMakeAnyMoves = moves.chitPositions.length > 0 || moves.canMoveAwaitingChit;
+
+        /**
+         * If the player cannot make any moves then skip their go.
+         */
+        if (!canPlayerMakeAnyMoves) {
             /**
              * Switch the side playing.
              */
