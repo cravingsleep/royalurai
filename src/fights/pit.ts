@@ -3,7 +3,7 @@ import Team from '../types/team';
 import Move, { Roll } from '../types/move';
 import Game from '../types/game';
 import { gameEnded, getWinningSide, getMoveableChits } from '../validators/validators';
-import { getStartingGameState, flowerPositions } from './constants';
+import { getStartingGameState, flowerPositions, safeSpace } from './constants';
 import { randomUrRoll } from '../util';
 import { PlaceNewChitError, ChitDoesNotExistError } from './errors';
 

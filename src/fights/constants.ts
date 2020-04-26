@@ -21,3 +21,8 @@ export const getStartingGameState = (): Game => ({
  * The positions of the flowers on the board.
  */
 export const flowerPositions = [4, 8, 14];
+
+/**
+ * The position of the safe space on the board.
+ */
+export const safeSpace = 8;

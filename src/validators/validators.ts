@@ -1,6 +1,7 @@
 import Game from '../types/game';
 import { Roll } from '../types/move';
 import Team from '../types/team';
+import { safeSpace } from '../fights/constants';
 
 interface ValidMoves {
     chitPositions: number[];
@@ -61,7 +62,21 @@ export function getMoveableChits(
          */
         const hitsOwn = ownTeamChits.find(position => position === potentialPosition);
 
-        return !hitsOwn;
+        /**
+         * The chits of the opponents team.
+         */
+        const notOwnTeamChits = team !== Team.WHITE ? whiteChitPositions : blackChitPositions;
+
+        /**
+         * Is the chit hitting an occupied safe space.
+         */
+        const hittingOccupiedSafeSpace = potentialPosition === safeSpace && notOwnTeamChits.includes(safeSpace);
+
+        /**
+         * The chit can move if it is not going to hit one of its own and it is not hitting
+         * the safe space when an opponent piece is there.
+         */
+        return !hitsOwn && !hittingOccupiedSafeSpace;
     });
 
     return {
