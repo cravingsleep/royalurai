@@ -1,4 +1,4 @@
-import Game from '../types/game';
+import Game, { GameTeam } from '../types/game';
 import { Roll } from '../types/move';
 import Team from '../types/team';
 import { safeSpace } from '../fights/constants';
@@ -124,6 +124,26 @@ export function getWinningSide(game: Game): Team | null {
     }
 
     return null;
+}
+
+function validTeam(team: GameTeam): boolean {
+    // awaitingChits + completedChits + playing chits === 7
+    const addsUp = team.chitsAwaiting + team.chitsCompleted + team.chitPositions.length === 7;
+
+    // all chit positions are unique
+    const areAllUnique = Array.from(new Set(team.chitPositions)).length === team.chitPositions.length;
+
+    const allValidChitPositions = team.chitPositions.every(position => position > 0 && position < 15);
+
+    return addsUp && areAllUnique && allValidChitPositions;
+}
+
+/**
+ * Returns whether a game is in a valid state.
+ */
+export function validGameState(game: Game): boolean {
+    // awaitingChits + completedChits + playing chits === 7
+    return validTeam(game.white) && validTeam(game.black);
 }
 
 

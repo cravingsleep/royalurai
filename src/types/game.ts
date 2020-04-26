@@ -1,4 +1,4 @@
-interface Team {
+export interface GameTeam {
     /**
      * The amount of chits completed and through the board
      * for this team.
@@ -19,8 +19,8 @@ interface Team {
 }
 
 interface Game {
-    white: Team;
-    black: Team;
+    white: GameTeam;
+    black: GameTeam;
 }
 
 export default Game;

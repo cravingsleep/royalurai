@@ -16,7 +16,9 @@ export function simulate<T extends Player>(
     return range(iterations).reduce((acc, _, index) => {
         const isPlayer1White = index % 2 === 0;
 
-        const pitting = isPlayer1White ? pit(Player1, Player2) : pit(Player2, Player1);
+        const {
+            winningSide: pitting
+        } = isPlayer1White ? pit(Player1, Player2) : pit(Player2, Player1);
 
         const didPlayerOneWin = isPlayer1White && pitting === Team.WHITE
             || (!isPlayer1White && pitting === Team.BLACK);

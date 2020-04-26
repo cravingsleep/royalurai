@@ -35,3 +35,11 @@ export class ChitDoesNotExistError extends StrategyError {
         this.message = 'A chit that does not exist was instructed to move.';
     }
 }
+
+export class InvalidGameState extends StrategyError {
+    constructor(game: Game, side: Team, move: Move, roll: Roll) {
+        super(game, side, move, roll);
+
+        this.message = 'A move has resulted in an invalid game state.';
+    }
+}
