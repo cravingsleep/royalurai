@@ -3,7 +3,7 @@ import RandomStrategy from './strategies/random';
 import RerollerStrategy from './strategies/reroller';
 
 console.log(simulate(
-    RerollerStrategy,
+    RandomStrategy,
     RandomStrategy,
     10000
 ));

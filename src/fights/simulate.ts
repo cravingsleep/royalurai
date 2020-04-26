@@ -13,8 +13,8 @@ export function simulate<T extends Player>(
     Player2: new (team: Team) => T,
     iterations: number
 ): Winnings {
-    return range(iterations).reduce(acc => {
-        const isPlayer1White = Math.random() > 0.5;
+    return range(iterations).reduce((acc, _, index) => {
+        const isPlayer1White = index % 2 === 0;
 
         const pitting = isPlayer1White ? pit(Player1, Player2) : pit(Player2, Player1);
 
