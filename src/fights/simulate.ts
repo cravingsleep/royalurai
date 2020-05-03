@@ -11,10 +11,11 @@ interface Winnings {
 export function simulate<T extends Player>(
     Player1: new (team: Team) => T,
     Player2: new (team: Team) => T,
-    iterations: number
+    iterations: number,
+    alternateTeams = true
 ): Winnings {
     return range(iterations).reduce((acc, _, index) => {
-        const isPlayer1White = index % 2 === 0;
+        const isPlayer1White = !alternateTeams || index % 2 === 0;
 
         const {
             winningSide: pitting
