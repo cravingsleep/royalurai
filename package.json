@@ -7,12 +7,14 @@
     "scripts": {
         "start": "tsc && node build/index.js",
         "start:debug": "tsc && node --inspect=9229 build/index.js",
-        "build": "tsc"
+        "build": "tsc",
+        "start:visual": "live-server src/visual/"
     },
     "devDependencies": {
         "@typescript-eslint/eslint-plugin": "2.27.0",
         "@typescript-eslint/parser": "2.27.0",
         "eslint": "6.8.0",
+        "live-server": "1.2.1",
         "typescript": "3.8.3"
     },
     "dependencies": {

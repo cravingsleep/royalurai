@@ -12,7 +12,8 @@
     "ignorePatterns": [
         "webpack.config.*.js",
         "node_modules",
-        "build"
+        "build",
+        "src/visual"
     ],
     "rules": {
         "semi": [
